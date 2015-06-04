@@ -1,0 +1,47 @@
+     {
+  "builders": [{
+    "boot_command": [
+      "<esc><esc><enter><wait>",
+      "/install/vmlinuz noapic preseed/url=http://{{ .HTTPIP }}:{{ .HTTPPort }}/trusty-preseed.cfg ",
+      "debian-installer=en_US auto locale=en_US kbd-chooser/method=us ",
+      "hostname=vagrant ",
+      "fb=false debconf/frontend=noninteractive ",
+      "keyboard-configuration/modelcode=SKIP keyboard-configuration/layout=USA keyboard-configuration/variant=USA console-setup/ask_detect=false ",
+      "initrd=/install/initrd.gz -- <enter>"
+    ],
+    "boot_wait": "5s",
+    "guest_additions_path": "VBoxGuestAdditions_{{.Version}}.iso",
+    "guest_os_type": "Ubuntu_64",
+    "http_directory": "http",
+    "iso_checksum": "8acd2f56bfcba2f7ac74a7e4a5e565ce68c024c38525c0285573e41c86ae90c0",
+    "iso_checksum_type": "sha256",
+    "iso_url": "http://releases.ubuntu.com/14.04.2/ubuntu-14.04.2-server-amd64.iso",
+    "shutdown_command": "echo 'vagrant' | sudo -S shutdown -P now",
+    "ssh_password": "vagrant",
+    "ssh_username": "vagrant",
+    "ssh_wait_timeout": "20m",
+    "type": "virtualbox-iso",
+    "virtualbox_version_file": ".vbox_version",
+    "vm_name": "mojocode-typo3"
+  }],
+  "provisioners": [{
+    "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
+    "scripts": [
+      "scripts/vagrant.sh",
+      "scripts/upgrade.sh",
+      "scripts/virtualbox.sh",
+      "scripts/typo3/install.sh"
+    ],
+    "type": "shell"
+  }, {
+    "execute_command": "echo 'vagrant' | {{.Vars}} sudo -E -S bash '{{.Path}}'",
+    "scripts": [
+      "scripts/vm_cleanup.sh"
+    ],
+    "type": "shell"
+  }],
+  "post-processors": [{
+    "type": "vagrant",
+    "output": "builds/typo3.box"
+  }]
+}
