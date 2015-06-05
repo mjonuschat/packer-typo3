@@ -16,9 +16,10 @@ vagrant box add --name mojocode/typo3 builds/typo3.box
 ```ruby
 Vagrant.configure(2) do |config|
   config.vm.box = 'mojocode/typo3'
-  config.vm.box_check_update = false
-
-  config.vm.network 'forwarded_port', guest: 80, host: 8080
+  # Uncomment the following lines if you want to use the pre-packed box image
+  # config.vm.box_url = 'http://vagrant-boxes.mojocode.de/typo3/'
+  # config.vm.box_version = '~> 1.0.0'
+  # config.vm.box_check_update = true
 
   config.vm.network 'private_network', ip: '192.168.144.120'
 
